@@ -48,7 +48,6 @@ app.post('/', async (req, res) => {
   }
 });
 
-
 // Update product
 app.put('/:id', async (req, res) => {
   try {
