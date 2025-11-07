@@ -14,8 +14,9 @@ services:
 
   frontend:
     # TODO: Define the frontend service
-    # It should build from the ./frontend directory
-    # ...
+    build: ./frontend
+    ports:
+      - "3000:3000"
     environment:
       - API_BASE=http://localhost:8000
     depends_on:
@@ -24,16 +25,16 @@ services:
 
   user-service:
     # TODO: Define the user-service
-    # It should build from the ./user-service directory
-    # It should depend on the user-db
-    # ...
+    build: ./user-service
+    depends_on:
+      - user-db
     networks: [bookstore-net]
 
   product-service:
     # TODO: Define the product-service
-    # It should build from the ./product-service directory
-    # It should depend on the product-db
-    # ...
+    build: ./product-service
+    depends_on:
+      - product-db
     environment:
       - PGHOST=product-db
       - PGUSER=postgres
@@ -44,9 +45,11 @@ services:
 
   order-service:
     # TODO: Define the order-service
-    # It should build from the ./order-service directory
-    # It should depend on the order-db, message-broker, and product-service
-    # ...
+    build: ./order-service
+    depends_on:
+      - order-db
+      - message-broker
+      - product-service
     environment:
       - PGHOST=order-db
       - PGUSER=postgres
