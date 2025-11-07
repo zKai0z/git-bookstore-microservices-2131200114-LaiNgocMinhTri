@@ -1,6 +1,6 @@
 import amqplib from 'amqplib';
 
-let channel = null;
+let channel;
 
 export async function connectToBroker() {
   try {

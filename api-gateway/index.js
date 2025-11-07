@@ -10,12 +10,18 @@ const apiRoutes = {
   '/api/users': 'http://user-service:8001',
   '/api/products': 'http://product-service:8002',
   '/api/orders': 'http://order-service:8003',
-  '/': 'http://frontend:3000'
+  '/': 'http://frontend:3000',
 };
+
 for (const [route, target] of Object.entries(apiRoutes)) {
-  // TODO: Use the `createProxyMiddleware` to forward requests.
-  // The configuration should include the `target` and `changeOrigin: true`.
-  // Apply this middleware to the `app` for each route.
+  app.use(
+    route,
+    createProxyMiddleware({
+      target,
+      changeOrigin: true,
+      pathRewrite: { [`^${route}`]: '' },
+    })
+  );
 }
 
 const PORT = 8000;

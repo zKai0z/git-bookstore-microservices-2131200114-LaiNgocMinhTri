@@ -28,8 +28,14 @@ app.post('/register', async (req, res) => {
   try {
     const { username, password } = req.body;
     // TODO: Hash the password using bcrypt. `bcrypt.hash(password, 10)`
-    // TODO: Create a new User instance with the username and hashed password.
-    // TODO: Save the new user to the database.
+    if (!username || !password)
+      return res.status(400).json({ error: 'Username and password required' });
+
+    const existing = await User.findOne({ username });
+    if (existing) return res.status(409).json({ error: 'Username already taken' });
+    const hashed = await bcrypt.hash(password, 10);
+    const user = new User({ username, password: hashed });
+    await user.save();
     res.status(201).json({ message: 'User created', token: signToken(user) });
   } catch (err) {
     console.error('Register error:', err);
